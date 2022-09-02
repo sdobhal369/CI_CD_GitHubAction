@@ -25,9 +25,27 @@ jobs:
 
     - name: Npm install, build and test
       run: |
-          ls -lart
-          cd workspace/
-          ls -lart
           npm install
           ls -lart
-          
+    
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v3
+      with:
+        name: Artifacts
+        path: ${{ GITHUB_WORKSPACE }}
+        
+  download:   
+    runs-on: ubuntu-latest
+   
+    steps:
+
+    - name: Workspace
+      uses: actions/download-artifact@v2
+      with:
+        name: Artifacts
+
+    - name: Show
+      run: |
+          ls -lart
+          cd ${GITHUB_WORKSPACE}/
+          ls -lart
