@@ -13,6 +13,13 @@ jobs:
    
     steps:
 
+    - run: |
+          ls -lart
+          mkdir -p workspace
+          echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}"
+          cd ${GITHUB_WORKSPACE}/
+          ls -lart
+    
     - name: Checkout to the repository
       uses: actions/checkout@v3
 
@@ -20,8 +27,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '16.x'
-  
-    - run: mkdir -p workspace
 
     - name: Npm install, build and test
       run: npm install
@@ -30,4 +35,6 @@ jobs:
       run: |
           ls -lart
           echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}"
+          cd ${GITHUB_WORKSPACE}/
+          ls -lart
           
