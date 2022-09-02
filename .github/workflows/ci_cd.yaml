@@ -25,6 +25,9 @@ jobs:
 
     - name: Npm install, build and test
       run: |
+          ls -lart
           cd workspace/
+          ls -lart
           npm install
+          ls -lart
           
