@@ -20,6 +20,14 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '16.x'
+  
+    - run: mkdir -p workspace
 
     - name: Npm install, build and test
       run: npm install
+      
+    - name: Workspace
+      run: |
+          ls -lart
+          echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}"
+          
