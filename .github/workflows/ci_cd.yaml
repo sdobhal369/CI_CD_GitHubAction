@@ -9,6 +9,7 @@ on:
 jobs:  
 
   build_and_test:   
+  
     runs-on: ubuntu-latest 
    
     steps:
@@ -42,6 +43,8 @@ jobs:
 
 
   download_artifact:   
+  
+    needs: build_and_test
     runs-on: ubuntu-latest 
    
     steps:
