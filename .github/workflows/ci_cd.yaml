@@ -23,7 +23,10 @@ jobs:
 
     - name: Npm install, build and test
       run: |
+          set -x
+          ls -lart
           npm install
+          ls -lart
           
     - name: Upload Artifacts
       uses: actions/upload-artifact@v3
@@ -32,3 +35,25 @@ jobs:
         path: |
              node_modules/
              package-lock.json
+
+    - name: Show files
+      run: |
+          ls -lart
+
+
+  download_artifact:   
+    runs-on: ubuntu-latest 
+   
+    steps:
+
+    - name: Checkout to the repository
+      uses: actions/checkout@v3
+
+    - name: Download Artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: Artifacts
+
+    - name: Show
+      run: |
+          ls -lart
