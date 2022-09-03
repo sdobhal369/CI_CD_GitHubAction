@@ -24,10 +24,11 @@ jobs:
     - name: Npm install, build and test
       run: |
           npm install
-          ls -lart
-          cd ..
-          ls -lart
-          tar -cvzf js-package.tar.gz src/
-          ls -lart
-          cd src/
-          ls -lart
+          
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Artifacts
+        path: |
+             node_modules/
+             package-lock.json
