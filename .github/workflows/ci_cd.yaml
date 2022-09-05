@@ -65,16 +65,20 @@ jobs:
     - name: Checkout to the repository
       uses: actions/checkout@v3
  
-    - name: Create kube config
-      run: |
-          mkdir -p $HOME/.kube/
-          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
-          chmod 600 $HOME/.kube/config
+    - name: Start Minikube Cluster
+      id: minikube
+      uses: medyagh/setup-minikube@master
+      with:
+        minikube-version: 1.24.0
+        driver: docker
+        kubernetes-version: v1.22.3
+
+    - name: Testing the cluster!
+      run: kubectl get pods -A
 
 # Deploy the Docker image on the local minikube cluster
 
     - name: Deploy to Minikube
       run: |
-          kubectl config current-context
           kubectl apply -f Deployment/mongodb.yaml
     
