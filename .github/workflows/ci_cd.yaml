@@ -24,7 +24,6 @@ jobs:
 
     - name: Npm install, build and test
       run: |
-          set -x
           ls -lart
           npm install
           ls -lart
@@ -36,11 +35,6 @@ jobs:
         path: |
              node_modules/
              package-lock.json
-
-    - name: Show files
-      run: |
-          ls -lart
-
 
   download_artifact:   
   
@@ -56,7 +50,31 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: Artifacts
-
-    - name: Show
+        
+    - name: Show Workspace Files
       run: |
-          ls -lart
+          ls -lart       
+
+  deploy:   
+  
+    needs: [build_and_test, download_artifact]
+    runs-on: ubuntu-latest 
+   
+    steps:
+
+    - name: Checkout to the repository
+      uses: actions/checkout@v3
+ 
+    - name: Create kube config
+      run: |
+          mkdir -p $HOME/.kube/
+          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+# Deploy the Docker image on the local minikube cluster
+
+    - name: Deploy to Minikube
+      run: |
+          kubectl config current-context
+          kubectl apply -f Deployment/mongodb.yaml
+    
