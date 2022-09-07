@@ -1,0 +1,59 @@
+# This workflow can be triggered by PR creation or code push in PR, or manually using workflow dispatch.
+
+name: CI/CD Workflow for Node Application
+
+on:
+  
+  workflow_dispatch:
+  
+  pull_request:
+    branches: 
+    - main
+
+
+
+jobs:  
+
+  node_js:
+
+    - name: Node Application Workflow
+      uses: sdobhal369/GitHubAction_Templates/template/node_js.yaml@main
+      with:
+        Npm_Lint: npm run lint:fix
+        Npm_Test: npm run test:c
+      secrets:
+        NEXUS_REGISTRY: ${{ secrets.NEXUS_REGISTRY }}
+        NEXUS_AUTH: ${{ secrets.NEXUS_AUTH }}
+  
+  
+  sonarqube:
+  
+    - name: Sonarqube Scanning Workflow
+      uses: sdobhal369/GitHubAction_Templates/template/sonarqube.yaml@main
+      secrets:
+        SONAR_AUTH: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        SONAR_PROJ_KEY: ${{ secrets.SONAR_PROJ_KEY }}
+  
+  
+  docker:
+  
+    - name: Docker Workflow
+      uses: sdobhal369/GitHubAction_Templates/template/docker_build&push.yaml@main
+      secrets:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
+        DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
+  
+  minikube:
+  
+    - name: Minikube Deployment Workflow
+      uses: sdobhal369/GitHubAction_Templates/template/minikube_deploy.yaml@main
+      with:
+        DOCKER_SERVER: https://index.docker.io/v1/
+        DOCKER_EMAIL: shubham.dobhal@successive.com
+        DEPLOY_PATH: Deployment/
+      secrets:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
+        DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
