@@ -27,7 +27,9 @@ jobs:
   
   
   sonarqube:
-  
+
+    needs: [node_js]
+
     - name: Sonarqube Scanning Workflow
       uses: sdobhal369/GitHubAction_Templates/template/sonarqube.yaml@main
       secrets:
@@ -38,6 +40,8 @@ jobs:
   
   docker:
   
+    needs: [node_js, sonarqube]
+    
     - name: Docker Workflow
       uses: sdobhal369/GitHubAction_Templates/template/docker_build&push.yaml@main
       secrets:
@@ -47,6 +51,8 @@ jobs:
   
   minikube:
   
+    needs: [node_js, sonarqube, docker]
+    
     - name: Minikube Deployment Workflow
       uses: sdobhal369/GitHubAction_Templates/template/minikube_deploy.yaml@main
       with:
