@@ -65,17 +65,18 @@ jobs:
     - name: Checkout to the repository
       uses: actions/checkout@v3
  
-    - name: Create kube config
-      run: |
-          ls -lart
-          mkdir -p $HOME/.kube/
-          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
-          chmod 600 $HOME/.kube/config
+    - name: Start Minikube Cluster
+      uses: medyagh/setup-minikube@master
+
+    - name: Testing the cluster!
+      run: kubectl get pods -A
+
+    - name: Authenticate GitHub Actions with Cluster
+      run: kubectl create clusterrolebinding serviceaccounts-cluster-admin --clusterrole=cluster-admin --group=system:serviceaccounts
 
 # Deploy the Docker image on the local minikube cluster
 
     - name: Deploy to Minikube
       run: |
-          kubectl config current-context
           kubectl apply -f Deployment/mongodb.yaml
     
